@@ -1,54 +1,52 @@
-var SAMURAIPRINCIPLE = { };
-
+var SAMURAIPRINCIPLE = SAMURAIPRINCIPLE || {};
 SAMURAIPRINCIPLE.eventDispatcher = function (base) {
-  var eventListeners = [];
-  base.addEventListener = function (eventType, eventListener, priority) {
-    if (!eventListener) {
-      eventListener = eventType;
-      eventType = 'default';
+  'use strict';
+  var listeners = [];
+  base.addEventListener = function (type, listener, priority) {
+    if (!listener) {
+      listener = type;
+      type = 'default';
     }
-    eventListeners.push({
-      listener: eventListener,
-      type: eventType,
-      prio: priority || 1
+    listeners.push({
+      type: type,
+      listener: listener,
+      priority: priority
     });
   };
   base.listener = function () {
-    return eventListeners[0].listener;
+    return listeners[0].listener;
   };
-  base.dispatchEvent = function (eventType, event) {
-    if (!event) {
-      event = eventType;
-      eventType = 'default';
+  base.dispatchEvent = function (type) {
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length === 1) {
+      type = 'default';
+    } else {
+      args.shift();
     }
-    eventListeners.filter(function (details) {
-      return details.type === eventType;
-    }).sort(function (details1, details2) {
-      return details2.prio - details1.prio;
-    }).some(function (details) {
-      try {
-        if (details.listener(event) === false) return true;
-      } catch (e) { }
-    });
+    listeners
+        .filter(function (listenerDetails) {
+          return listenerDetails.type === type;
+        })
+        .sort(function (firstListenerDetails, secondListenerDetails) {
+          return secondListenerDetails.priority - firstListenerDetails.priority;
+        })
+        .some(function (listenerDetails) {
+          try {
+            return listenerDetails.listener.apply(undefined, args) === false;
+          } catch (error) {
+          }
+        });
   };
   base.createObservableProperty = function (propertyName) {
     var propertyValue;
-    base['get' + propertyName] = function() {
-      return propertyValue;
-    };
+    base['on' + propertyName + 'Changed'] = base.addEventListener.bind(base, propertyName + 'Changed');
     base['set' + propertyName] = function (value) {
       propertyValue = value;
-      base.dispatchEvent(propertyName, value);
+      base.dispatchEvent(propertyName + 'Changed', value);
     };
-/*    base['on' + propertyName + 'Changed'] = function(listener) {
-      base.addEventListener(propertyName, listener);
+    base['get' + propertyName] = function () {
+      return propertyValue;
     };
-    var changedMethod = 'on' + propertyName + 'Changed';
-    changedMethod.bind*/
-    
-    // ** Have replaced with bind ** - could have used base as first parameter
-    // but as addEventListener doesn't use 'this' then not required.
-    base['on' + propertyName + 'Changed'] = base.addEventListener.bind(undefined, propertyName);
-  }
+  };
   return base;
-}
+};

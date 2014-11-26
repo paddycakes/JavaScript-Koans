@@ -2,7 +2,7 @@
 var SAMURAIPRINCIPLE = SAMURAIPRINCIPLE || {};
 SAMURAIPRINCIPLE.GameOfLife = function () {
 	'use strict';
-	var self = this,
+	var self = SAMURAIPRINCIPLE.eventDispatcher(this),
 		isAlive = {},
 		cellKey = function (row, column) {
 			return row + '_' + column;
@@ -17,6 +17,7 @@ SAMURAIPRINCIPLE.GameOfLife = function () {
 		} else {
 			isAlive[key] = true;
 		}
+		self.dispatchEvent('cellStateChanged', row, column, self.isCellAlive(row, column));
 		return this;
 	};
 	this.tick = function () {
@@ -47,6 +48,21 @@ jQuery.fn.extend({
 		'use strict';
 		return this.each(function () {
 			var rootElement = jQuery(this);
+			// var tdList = rootElement.find('.grid tr td');
+/*			tdList.each(function (index) {
+				jQuery(this).onClick(gameOfLife.toggleCellState(3, 4));
+			});*/
+			rootElement.find('.grid tr td').on("click", function() {
+				gameOfLife.toggleCellState(3, 4, self);
+			});
+			rootElement.find('.tick').on("click", function() {
+				gameOfLife.tick();
+			});
+
+			gameOfLife.addEventListener("cellStateChanged", function (row, column) {
+				// toggleClass should be used here not addClass because you want to add when cell alive and remove when dead.
+				rootElement.find('.grid tr:nth-child(' + (row  + 1) + ') td:nth-child(' + (column + 1) + ')').toggleClass('alive', animationDuration);
+			})
 		});
 	}
 });

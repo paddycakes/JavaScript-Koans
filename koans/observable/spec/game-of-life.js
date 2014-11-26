@@ -24,8 +24,13 @@ describe('Game of Life Widget', function () {
 	'use strict';
 	var gameOfLife, widget;
 	beforeEach(function () {
-		gameOfLife = SAMURAIPRINCIPLE.eventDispatcher(jasmine.createSpyObj('gameOfLife', ['tick', 'toggleCellState']));
-		widget = jQuery('#gameOfLifeWidget').clone().appendTo('body').gameOfLifeWidget(gameOfLife, 10, 10);
+		gameOfLife = SAMURAIPRINCIPLE.eventDispatcher(
+				jasmine.createSpyObj('gameOfLife', ['tick', 'toggleCellState'])
+		);
+		widget = jQuery('#gameOfLifeWidget')
+				.clone()
+				.appendTo('body')
+				.gameOfLifeWidget(gameOfLife, 10, 10);
 	});
 	it('should call toggleCellState method when a table cell is clicked', function () {
 		widget.find('.grid tr:nth-child(4) td:nth-child(5)').click();
