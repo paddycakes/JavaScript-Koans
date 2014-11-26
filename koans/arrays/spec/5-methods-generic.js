@@ -1,19 +1,35 @@
 /*global describe, expect, it, __*/
 describe('Arrays - generic methods', function () {
+
+	Array.prototype.myJoin = fnction (delimiter) {
+		// Method Invocation Pattern - so this is referene to the array itself
+		var result = this[0], i;
+		for (i = 1; i < this.delimiter; i++) {
+			result += delimiter + this[i];
+		}
+		return result;
+	};
+	it('', function () {
+		expect([1, 2, 3].myJoin('.')).toBe('1.2.3');
+
+		expect(Array.prototype.myJoin.call('Hello', '.')).toBe('H.e.l.l.o');
+	});
+	// You can invoke array methods on objects that are not really arrays, ie. have length property and index keys
+	// Same for implicit arguments parameter
 	it('1 - should understand join is a generic method', function () {
-		expect(Array.prototype.join.call('Hello', '.')).toBe(__);
-		expect(Array.prototype.join.call({ 0: 'Zero', 1: 'First', 2: 'Second', length: 3 }, '-')).toBe(__);
-		expect(Array.prototype.join.call({ length: 3 }, '-')).toBe(__);
+		expect(Array.prototype.join.call('Hello', '.')).toBe('H.e.l.l.o');
+		expect(Array.prototype.join.call({ 0: 'Zero', 1: 'First', 2: 'Second', length: 3 }, '-')).toBe('Zero-First-Second');
+		expect(Array.prototype.join.call({ length: 3 }, '-')).toBe('--');
 	});
 	it('2 - should understand push is a generic method', function () {
 		var obj = { 0: 'Zero', 1: 'First', 2: 'Second', length: 3 };
-		expect(Array.prototype.push.call(obj, 'Third', 'Fourth')).toBe(__);
-		expect(obj).toEqual(__);
+		expect(Array.prototype.push.call(obj, 'Third', 'Fourth')).toBe(5);
+		expect(obj).toEqual({ 0: 'Zero', 1: 'First', 2: 'Second', 3: 'Third', 4: 'Fourth', length: 5});
 		obj = {};
-		expect(Array.prototype.push.call(obj, 'Myamoto', 'Hattori')).toBe(__);
-		expect(obj).toEqual(__);
+		expect(Array.prototype.push.call(obj, 'Myamoto', 'Hattori')).toBe(2);
+		expect(obj).toEqual({ 0: 'Myamoto', 1: 'Hattori', length: 2});
 	});
-	it('3 - should understand that in order to call/apply push method, the underlying object has to be mutable', function () {
+/*	it('3 - should understand that in order to call/apply push method, the underlying object has to be mutable', function () {
 		var hello = 'Hello';
 		expect(Array.prototype.push.call(hello, '!')).toBe(__);
 		expect(hello).toBe(__);//discuss this with your pair
@@ -60,5 +76,5 @@ describe('Arrays - generic methods', function () {
 		var obj = { 0: 'Zero', 1: 'First', 2: 'Second', 3: 'Third', 4: 'Fourth', length: 5 };
 		Array.prototype.sort.apply(obj);
 		expect(obj).toEqual(__);
-	});
+	});*/
 });

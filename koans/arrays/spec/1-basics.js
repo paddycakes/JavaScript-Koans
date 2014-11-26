@@ -9,29 +9,29 @@ describe('Arrays - basics', function () {
 	});
 	it('1 - should understand array literals', function () {
 		var array = [1, '2', [3], false], returnArguments, args;
-		expect(isArray(array)).toBe(__);
-		expect(isArray(array[0])).toBe(__);
-		expect(isArray(array[1])).toBe(__);
-		expect(isArray(array[2])).toBe(__);
-		expect(isArray(array[3])).toBe(__);
+		expect(isArray(array)).toBe(true);
+		expect(isArray(array[0])).toBe(false);
+		expect(isArray(array[1])).toBe(false);
+		expect(isArray(array[2])).toBe(true);
+		expect(isArray(array[3])).toBe(false);
 		returnArguments = function () {
 			return arguments;
 		};
 		args = returnArguments(1, 2, 3);
-		expect(isArray(args)).toBe(__);
+		expect(isArray(args)).toBe(false);    // Looks like an array but is not an Array.
 	});
 	it('2 - arguments recap', function () {
 		var returnArguments = function () {
 			return arguments;
 		}, args;
 		args = returnArguments(1, 2, 3);
-		expect(args[0]).toEqual(__);
-		expect(args[1]).toEqual(__);
-		expect(args[2]).toEqual(__);
-		expect(args.length).toEqual(__);
-		expect(isArray(args)).toBe(__);
+		expect(args[0]).toEqual(1);
+		expect(args[1]).toEqual(2);
+		expect(args[2]).toEqual(3);
+		expect(args.length).toEqual(3);
+		expect(isArray(args)).toBe(false);		// Looks like an array but is not an Array.
 	});
-	it('3 - should understand [] operator', function () {
+/*	it('3 - should understand [] operator', function () {
 		expect(array[1]).toBe(__);
 		expect(array[3]).toBe(__);
 	});
@@ -73,5 +73,5 @@ describe('Arrays - basics', function () {
 		}
 		expect(iterationsFor).toBe(__);
 		expect(iterationsForIn).toBe(__);
-	});
+	});*/
 });
