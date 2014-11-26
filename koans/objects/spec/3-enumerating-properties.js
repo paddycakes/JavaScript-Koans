@@ -15,6 +15,7 @@ describe('Enumerating properties', function () {
 			}
 		}, name, properties = 0, ownProperties = 0, enumerableProperties = 0;
 		for (name in samurai) {
+			console.log(name);
 			properties += 1;
 			if (samurai.hasOwnProperty(name)) {
 				ownProperties += 1;
@@ -23,8 +24,8 @@ describe('Enumerating properties', function () {
 				enumerableProperties += 1;
 			}
 		}
-		expect(properties).toBe(__);
-		expect(ownProperties).toBe(__);
-		expect(enumerableProperties).toBe(__);
+		expect(properties).toBe(4);
+		expect(ownProperties).toBe(4);
+		expect(enumerableProperties).toBe(4);
 	});
 });
