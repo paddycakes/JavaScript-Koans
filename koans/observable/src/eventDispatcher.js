@@ -40,9 +40,15 @@ SAMURAIPRINCIPLE.eventDispatcher = function (base) {
       propertyValue = value;
       base.dispatchEvent(propertyName, value);
     };
-    base['on' + propertyName + 'Changed'] = function(listener) {
+/*    base['on' + propertyName + 'Changed'] = function(listener) {
       base.addEventListener(propertyName, listener);
     };
+    var changedMethod = 'on' + propertyName + 'Changed';
+    changedMethod.bind*/
+    
+    // ** Have replaced with bind ** - could have used base as first parameter
+    // but as addEventListener doesn't use 'this' then not required.
+    base['on' + propertyName + 'Changed'] = base.addEventListener.bind(undefined, propertyName);
   }
   return base;
 }
